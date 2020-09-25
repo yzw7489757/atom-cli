@@ -1,6 +1,6 @@
 {
   "name": "atom-template-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "拉取配置模板cli工具",
   "main": "index.js",
   "scripts": {
