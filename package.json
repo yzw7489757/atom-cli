@@ -1,10 +1,16 @@
 {
   "name": "atom-cli",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "拉取配置模板cli工具",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src"
+    "release": "standard-version --release-as",
+    "publish:major": "npm run release -- major && tnpm publish",
+    "publish:minor": "npm run release -- minor && tnpm publish",
+    "publish:patch": "npm run release -- patch && tnpm publish",
+    "lint": "eslint --quiet ./src --no-error-on-unmatched-pattern",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "hooks": {
     "pre-commit": "npm run lint"
@@ -17,7 +23,8 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^7.9.0",
-    "husky": "^4.3.0"
+    "husky": "^4.3.0",
+    "standard-version": "^9.0.0"
   },
   "dependencies": {
     "axios": "^0.20.0",
