@@ -1,8 +1,8 @@
 {
   "name": "atom-template-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "拉取配置模板cli工具",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "release": "standard-version --release-as",
     "publish:major": "npm run release -- major && npm publish",
@@ -28,7 +28,8 @@
     "cli"
   ],
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "precommit.silent": true,
   "devDependencies": {
