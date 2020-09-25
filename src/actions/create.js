@@ -9,7 +9,6 @@ const path = require('path')
 const { promisify } = require('util');
 const { wrapFetchAddLoding } = require('../utils')
 const MetalSmith = require('metalsmith'); // 遍历文件夹
-const repoPrefix = require('./config')('get', 'repoPrefix');
 let { render } = require('consolidate').ejs;
 const { fetchRepoList, fetchTagList, download } = require('../utils/fetchAPI')
 let ncp = require('ncp');
@@ -19,9 +18,7 @@ render = promisify(render);
 
 module.exports = async (projectName) => {
   let repos = await wrapFetchAddLoding(fetchRepoList, 'fetching repo list')();
-  repos = repos.filter(repo => {
-    return repo.name.indexOf(repoPrefix) !== -1
-  });
+  
 
   const { repo } = await Inquirer.prompt({
     name: 'repo',
@@ -51,7 +48,7 @@ module.exports = async (projectName) => {
         let askQuestion
         if (!fs.existsSync(path.join(target, 'ask.js'))) {
           // 没有ask.js文件，执行默认ask
-          askQuestion = require(path.join('../utils/ask'));
+          askQuestion = require(path.join('../utils/ask'))({ projectName });
         } else {
           askQuestion = require(path.join(target, 'ask.js'))
         }

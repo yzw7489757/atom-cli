@@ -1,6 +1,7 @@
 const { cacheFolder, downloadDirectory } = require('./constants');
 const fs = require('fs');
-const { judeDirExist, removeDir } = require('./index')
+const { judeDirExist, removeDir } = require('./index');
+
 
 const setCache = (name, data, type = 'json') => {
   try {
@@ -27,13 +28,15 @@ const readCache = (name, defaultValue, type = 'json') => {
 }
 
 const clearCache = () => {
-  Promise.all([
-    removeDir(cacheFolder, () => {
-      console.log('clear cache')
-    }),
-    removeDir(downloadDirectory, () => {
-      console.log('clear template')
+  const promisify = (fn) => (...args) => {
+    return new Promise(reslove => {
+      fn(...args, reslove)
     })
+  }
+
+  Promise.all([
+    promisify(removeDir)(cacheFolder),
+    promisify(removeDir)(downloadDirectory)
   ]).then(() => {
     console.log(`\n clear all task.\n`)
   })

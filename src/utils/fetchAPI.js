@@ -9,6 +9,7 @@ let downLoadGit = require('download-git-repo');
 const { exit } = require('process');
 downLoadGit = promisify(downLoadGit);
 
+const repoPrefix = config('getVal', 'repoPrefix');
 const register = config('getVal', 'register');
 const userName = config('getVal', 'userName');
 const protocol = config('getVal', 'protocol');
@@ -16,7 +17,7 @@ const protocol = config('getVal', 'protocol');
 // TODO：缓存和请求区分开来
 const fetchRepoList = async () => {
   let repoList = null;
-  const cacheName = `${register}/${userName}/repoList`;
+  const cacheName = `${register}/${userName}/${repoPrefix}repoList`;
 
   try{
     const { data } = await axios.get(`${protocol}://api.${register}.com/users/${userName}/repos?per_page=100&type=owner`)
@@ -32,6 +33,10 @@ const fetchRepoList = async () => {
   if(!repoList || repoList.length === 0) {
     throw new Error('\n\nThe specified organization has no repository list data or the local cache does not exist!\n\n')
   }
+
+  repoList = repoList.filter(repo => {
+    return repo.name.indexOf(repoPrefix) !== -1
+  });
 
   if(repoList.length === 0) {
     console.log('\n warn: target user not has any repo. \n')
@@ -59,6 +64,7 @@ const fetchTagList = async (repo) => {
     })
   })
 
+  // console.log(tagList);
   if(tagList.length === 0) {
     console.log('\n warn: target repo not has tags. \n')
     exit()
