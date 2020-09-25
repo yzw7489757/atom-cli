@@ -17,7 +17,9 @@ atom-cli create <projectName>
 atom-cli clear cache
 ```
 
-## 设置origin
+## 设置
+默认的配置项目 [constants](https://github.com/yzw7489757/atom-cli/src/utils/constants.js#L8)
+### origin
 
 ``` shell
 atom-cli config set register <origin>
@@ -28,7 +30,7 @@ atom-cli config set register <origin>
 atom-cli config get register
 ```
 
-## 设置User
+### User
 同理
 
 ``` shell
@@ -48,6 +50,7 @@ atom-cli config get userName
 userName: USERNAME,
 register: "github",
 protocol: 'https'
+repoPrefix: 'atom-template'
 ```
 
 ``` shell

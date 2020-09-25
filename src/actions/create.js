@@ -9,6 +9,7 @@ const path = require('path')
 const { promisify } = require('util');
 const { wrapFetchAddLoding } = require('../utils')
 const MetalSmith = require('metalsmith'); // 遍历文件夹
+const repoPrefix = require('./config')('get', 'repoPrefix');
 let { render } = require('consolidate').ejs;
 const { fetchRepoList, fetchTagList, download } = require('../utils/fetchAPI')
 let ncp = require('ncp');
@@ -19,7 +20,7 @@ render = promisify(render);
 module.exports = async (projectName) => {
   let repos = await wrapFetchAddLoding(fetchRepoList, 'fetching repo list')();
   repos = repos.filter(repo => {
-    return repo.name.indexOf('atom-template') !== -1
+    return repo.name.indexOf(repoPrefix) !== -1
   });
 
   const { repo } = await Inquirer.prompt({
