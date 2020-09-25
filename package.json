@@ -1,6 +1,6 @@
 {
   "name": "atom-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "拉取配置模板cli工具",
   "main": "index.js",
   "scripts": {
@@ -17,9 +17,6 @@
   },
   "bin": {
     "atom-cli": "./bin/www"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.com"
   },
   "repository": {
     "type": "git",
