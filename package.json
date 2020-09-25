@@ -1,6 +1,6 @@
 {
   "name": "atom-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "拉取配置模板cli工具",
   "main": "index.js",
   "scripts": {
@@ -18,9 +18,18 @@
   "bin": {
     "atom-cli": "./bin/www"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
+  },
+  "author": "yzw7489757",
+  "license": "MIT",
+  "keywords": [
+    "cli"
+  ],
+  "files": [
+    "lib"
+  ],
+  "precommit.silent": true,
   "devDependencies": {
     "eslint": "^7.9.0",
     "husky": "^4.3.0",
