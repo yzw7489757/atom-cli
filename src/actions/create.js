@@ -18,7 +18,7 @@ render = promisify(render);
 
 module.exports = async (projectName) => {
   let repos = await wrapFetchAddLoding(fetchRepoList, 'fetching repo list')();
-  
+
 
   const { repo } = await Inquirer.prompt({
     name: 'repo',
@@ -61,13 +61,11 @@ module.exports = async (projectName) => {
       })
       .use((files, metal, done) => {
         Reflect.ownKeys(files).forEach(async (file) => {
-          if(file.includes('package-lock') || file.includes('node_module')) return;
+          if (file.includes('package-lock') || file.includes('node_module')) return;
           let content = files[file].contents.toString();
-          if (file.includes('.js') || file.includes('.json') || file.includes('.html')) {
-            if (content.includes('<%')) { 
-              content = await render(content, metal.metadata()); // 渲染模板
-              files[file].contents = Buffer.from(content);
-            }
+          if (['.json', '.html', '.md'].indexOf(file) > -1 && content.includes('<%')) {
+            content = await render(content, metal.metadata()); // 渲染模板
+            files[file].contents = Buffer.from(content);
           }
         });
         done();
