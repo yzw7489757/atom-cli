@@ -48,9 +48,12 @@ module.exports = async (projectName) => {
         let askQuestion
         if (!fs.existsSync(path.join(target, 'ask.js'))) {
           // 没有ask.js文件，执行默认ask
-          askQuestion = require(path.join('../utils/ask'))({ projectName });
+          askQuestion = require(path.join('../utils/ask'));
         } else {
           askQuestion = require(path.join(target, 'ask.js'))
+        }
+        if(typeof askQuestion === 'function') {
+          askQuestion = askQuestion({ projectName })
         }
 
         const result = await Inquirer.prompt(askQuestion);
@@ -62,10 +65,12 @@ module.exports = async (projectName) => {
       .use((files, metal, done) => {
         Reflect.ownKeys(files).forEach(async (file) => {
           if (file.includes('package-lock') || file.includes('node_module')) return;
-          let content = files[file].contents.toString();
-          if (['.json', '.html', '.md'].indexOf(file) > -1 && content.includes('<%')) {
-            content = await render(content, metal.metadata()); // 渲染模板
-            files[file].contents = Buffer.from(content);
+          if(['.json', '.html', '.md'].some(prefix => ~file.indexOf(prefix))) {
+            let content = files[file].contents.toString();
+            if (content.includes('<%')) {
+              content = await render(content, metal.metadata()); // 渲染模板
+              files[file].contents = Buffer.from(content);
+            }
           }
         });
         done();

@@ -18,9 +18,10 @@ const protocol = config('getVal', 'protocol');
 const fetchRepoList = async () => {
   let repoList = null;
   const cacheName = `${register}/${userName}/${repoPrefix}repoList`;
-
+  const url = `${protocol}://api.${register}.com/users/${userName}/repos?per_page=100&type=owner`
+  // console.log('\nrequest ', url);
   try{
-    const { data } = await axios.get(`${protocol}://api.${register}.com/users/${userName}/repos?per_page=100&type=owner`)
+    const { data } = await axios.get(url)
     repoList = data
     if(repoList) {
       setCache(cacheName, repoList)
@@ -30,8 +31,9 @@ const fetchRepoList = async () => {
     repoList = readCache(cacheName, []);
   }
 
-  if(!repoList || repoList.length === 0) {
-    throw new Error('\n\nThe specified organization has no repository list data or the local cache does not exist!\n\n')
+  if(!repoList) {
+    console.log('\n\nThe specified organization has no repository list data or the local cache does not exist!\n\n')
+    exit();
   }
 
   repoList = repoList.filter(repo => {
@@ -49,7 +51,9 @@ const fetchRepoList = async () => {
 const fetchTagList = async (repo) => {
   const cacheName = `${register}/${userName}/_${repo}/tags`
   const tagList = await new Promise((resolve) => {
-    axios.get(`${protocol}://api.${register}.com/repos/${userName}/${repo}/tags`).then((res) => {
+    const url = `${protocol}://api.${register}.com/repos/${userName}/${repo}/tags`
+    // console.log('\nrequest tags ', url);
+    axios.get(url).then((res) => {
       const { data } = res;
       setCache(cacheName, data)
       return resolve(data)
@@ -58,7 +62,8 @@ const fetchTagList = async (repo) => {
       console.log(`\n ${err.code} \ngithub get tags api call failed, will use local cache data\n\n`);
       const cache = readCache(cacheName, [])
       if(!cache) {
-        throw new Error('\n\nThe specified organization has no tag list data or the local cache does not exist!\n\n')
+        console.log('\n\nThe specified organization has no tag list data or the local cache does not exist!\n\n')
+        exit();
       }
       return resolve(cache)
     })
